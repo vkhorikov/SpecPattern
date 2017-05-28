@@ -1,7 +1,7 @@
 Specification Pattern in C#
 =====================
 
-This is the source code for the [Specification Pattern in C# Pluralsight course][L1] (link is coming soon).
+This is the source code for the Specification Pattern in C# Pluralsight course (link is coming soon).
 
 How to Get Started
 --------------
@@ -14,7 +14,6 @@ Licence
 --------------
 [Apache 2 License][L4]
 
-[L1]: 
 [L2]: src/DatabaseWithDirector.sql
 [L3]: src/UI/App.xaml.cs
 [L4]: http://www.apache.org/licenses/LICENSE-2.0
