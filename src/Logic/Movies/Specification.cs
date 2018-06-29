@@ -6,7 +6,7 @@ namespace Logic.Movies
 {
     internal sealed class IdentitySpecification<T> : Specification<T>
     {
-        public override Expression<Func<T, bool>> ToExpression()
+        public override Expression<Func<T, bool>> ToExpression() 
         {
             return x => true;
         }
@@ -17,7 +17,7 @@ namespace Logic.Movies
     {
         public static readonly Specification<T> All = new IdentitySpecification<T>();
 
-        public bool IsSatisfiedBy(T entity)
+        public bool IsSatisfiedBy(T entity) 
         {
             Func<T, bool> predicate = ToExpression().Compile();
             return predicate(entity);
@@ -25,7 +25,7 @@ namespace Logic.Movies
 
         public abstract Expression<Func<T, bool>> ToExpression();
 
-        public Specification<T> And(Specification<T> specification)
+        public Specification<T> And(Specification<T> specification) 
         {
             if (this == All)
                 return specification;
@@ -35,7 +35,7 @@ namespace Logic.Movies
             return new AndSpecification<T>(this, specification);
         }
 
-        public Specification<T> Or(Specification<T> specification)
+        public Specification<T> Or(Specification<T> specification) 
         {
             if (this == All || specification == All)
                 return All;
@@ -43,7 +43,7 @@ namespace Logic.Movies
             return new OrSpecification<T>(this, specification);
         }
 
-        public Specification<T> Not()
+        public Specification<T> Not() 
         {
             return new NotSpecification<T>(this);
         }
@@ -66,9 +66,9 @@ namespace Logic.Movies
             Expression<Func<T, bool>> leftExpression = _left.ToExpression();
             Expression<Func<T, bool>> rightExpression = _right.ToExpression();
 
-            BinaryExpression andExpression = Expression.AndAlso(leftExpression.Body, rightExpression.Body);
+            var invokedExpression = Expression.Invoke(rightExpression, leftExpression.Parameters);
 
-            return Expression.Lambda<Func<T, bool>>(andExpression, leftExpression.Parameters.Single());
+            return (Expression<Func<T, Boolean>>)Expression.Lambda(Expression.AndAlso(leftExpression.Body, invokedExpression), leftExpression.Parameters);
         }
     }
 
@@ -84,14 +84,14 @@ namespace Logic.Movies
             _left = left;
         }
 
-        public override Expression<Func<T, bool>> ToExpression()
+        public override Expression<Func<T, bool>> ToExpression() 
         {
             Expression<Func<T, bool>> leftExpression = _left.ToExpression();
             Expression<Func<T, bool>> rightExpression = _right.ToExpression();
 
-            BinaryExpression orExpression = Expression.OrElse(leftExpression.Body, rightExpression.Body);
+            var invokedExpression = Expression.Invoke(rightExpression, leftExpression.Parameters);
 
-            return Expression.Lambda<Func<T, bool>>(orExpression, leftExpression.Parameters.Single());
+            return (Expression<Func<T, Boolean>>)Expression.Lambda(Expression.OrElse(leftExpression.Body, invokedExpression), leftExpression.Parameters);
         }
     }
 
