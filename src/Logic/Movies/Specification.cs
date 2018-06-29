@@ -16,7 +16,7 @@ namespace Logic.Movies
     {
         public static readonly Specification<T> All = new IdentitySpecification<T>();
 
-        public bool IsSatisfiedBy(T entity) 
+        public bool IsSatisfiedBy(T entity)
         {
             Func<T, bool> predicate = ToExpression().Compile();
             return predicate(entity);
@@ -42,7 +42,7 @@ namespace Logic.Movies
             return new OrSpecification<T>(this, specification);
         }
 
-        public Specification<T> Not() 
+        public Specification<T> Not()
         {
             return new NotSpecification<T>(this);
         }
