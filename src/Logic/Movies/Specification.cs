@@ -6,12 +6,11 @@ namespace Logic.Movies
 {
     internal sealed class IdentitySpecification<T> : Specification<T>
     {
-        public override Expression<Func<T, bool>> ToExpression() 
+        public override Expression<Func<T, bool>> ToExpression()
         {
             return x => true;
         }
     }
-
 
     public abstract class Specification<T>
     {
@@ -25,7 +24,7 @@ namespace Logic.Movies
 
         public abstract Expression<Func<T, bool>> ToExpression();
 
-        public Specification<T> And(Specification<T> specification) 
+        public Specification<T> And(Specification<T> specification)
         {
             if (this == All)
                 return specification;
@@ -35,7 +34,7 @@ namespace Logic.Movies
             return new AndSpecification<T>(this, specification);
         }
 
-        public Specification<T> Or(Specification<T> specification) 
+        public Specification<T> Or(Specification<T> specification)
         {
             if (this == All || specification == All)
                 return All;
@@ -48,7 +47,6 @@ namespace Logic.Movies
             return new NotSpecification<T>(this);
         }
     }
-
 
     internal sealed class AndSpecification<T> : Specification<T>
     {
@@ -72,7 +70,6 @@ namespace Logic.Movies
         }
     }
 
-
     internal sealed class OrSpecification<T> : Specification<T>
     {
         private readonly Specification<T> _left;
@@ -84,7 +81,7 @@ namespace Logic.Movies
             _left = left;
         }
 
-        public override Expression<Func<T, bool>> ToExpression() 
+        public override Expression<Func<T, bool>> ToExpression()
         {
             Expression<Func<T, bool>> leftExpression = _left.ToExpression();
             Expression<Func<T, bool>> rightExpression = _right.ToExpression();
@@ -94,7 +91,6 @@ namespace Logic.Movies
             return (Expression<Func<T, Boolean>>)Expression.Lambda(Expression.OrElse(leftExpression.Body, invokedExpression), leftExpression.Parameters);
         }
     }
-
 
     internal sealed class NotSpecification<T> : Specification<T>
     {
@@ -114,7 +110,6 @@ namespace Logic.Movies
         }
     }
 
-
     public sealed class MovieForKidsSpecification : Specification<Movie>
     {
         public override Expression<Func<Movie, bool>> ToExpression()
@@ -122,7 +117,6 @@ namespace Logic.Movies
             return movie => movie.MpaaRating <= MpaaRating.PG;
         }
     }
-
 
     public sealed class AvailableOnCDSpecification : Specification<Movie>
     {
@@ -133,7 +127,6 @@ namespace Logic.Movies
             return movie => movie.ReleaseDate <= DateTime.Now.AddMonths(-MonthsBeforeDVDIsOut);
         }
     }
-
 
     public sealed class MovieDirectedBySpecification : Specification<Movie>
     {
