@@ -46,6 +46,11 @@ namespace Logic.Movies
         {
             return new NotSpecification<T>(this);
         }
+
+        public static Specification<T> operator &(Specification<T> lhs, Specification<T> rhs) => lhs.And(rhs);
+        public static Specification<T> operator |(Specification<T> lhs, Specification<T> rhs) => lhs.Or(rhs);
+        public static Specification<T> operator !(Specification<T> spec) => spec.Not();
+
     }
 
     internal sealed class AndSpecification<T> : Specification<T>
